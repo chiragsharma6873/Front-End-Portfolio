@@ -1,0 +1,164 @@
+/* Project accordion. On desktop GSAP animates flex-grow, tilt, opacity, the image
+   filter (via --ag-gray / --ag-bright) and the body reveal; CSS only sets the base. */
+
+.accordion-gallery {
+  display: flex;
+  gap: 12px;
+  height: clamp(480px, 62vh, 620px);
+  perspective: 1600px;
+}
+
+.ag-panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--x-bg-2);
+  border: 1px solid var(--x-line);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: flex-grow, transform;
+}
+
+.ag-panel--active {
+  cursor: default;
+}
+
+.ag-panel:focus-visible {
+  outline: 2px solid var(--x-lime);
+  outline-offset: 3px;
+}
+
+.ag-panel__media {
+  --ag-gray: 1;
+  --ag-bright: 0.55;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(var(--ag-gray)) brightness(var(--ag-bright));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.ag-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.1) 30%, rgba(10, 10, 10, 0.92));
+  pointer-events: none;
+}
+
+.ag-panel__num {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  color: var(--x-ink);
+}
+
+.ag-panel__label {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  z-index: 2;
+  writing-mode: vertical-rl;
+  transform: translateX(-50%) rotate(180deg);
+  font: 600 18px/1 var(--x-sans);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.ag-panel__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 32px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.x-bar {
+  width: 48px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--x-lime);
+  margin-bottom: 18px;
+  transform-origin: left center;
+}
+
+.ag-panel h3 {
+  font: 700 clamp(28px, 3vw, 40px)/1 var(--x-sans);
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.ag-panel__type {
+  color: var(--x-lime);
+  margin-bottom: 14px;
+}
+
+.ag-panel__desc {
+  max-width: 520px;
+  color: #c9c8c2;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.ag-panel .x-pills {
+  margin-bottom: 22px;
+}
+
+.ag-panel .x-pill {
+  font-size: 13px;
+  padding: 6px 12px;
+  background: rgba(10, 10, 10, 0.55);
+}
+
+.ag-panel__btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ag-panel .x-btn:not(.x-btn--lime) {
+  background: rgba(10, 10, 10, 0.55);
+}
+
+/* Small screens: panels stack and every project is fully visible. */
+@media (max-width: 860px) {
+  .accordion-gallery {
+    flex-direction: column;
+    height: auto;
+    perspective: none;
+  }
+
+  .ag-panel {
+    flex: none;
+    min-height: 520px;
+    cursor: default;
+  }
+
+  .ag-panel__media {
+    --ag-gray: 0;
+    --ag-bright: 1;
+  }
+
+  .ag-panel__label {
+    display: none;
+  }
+
+  .ag-panel__body {
+    opacity: 1;
+    visibility: visible;
+    padding: 24px;
+  }
+
+  .ag-panel::after {
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.05) 15%, rgba(10, 10, 10, 0.95) 62%);
+  }
+}
